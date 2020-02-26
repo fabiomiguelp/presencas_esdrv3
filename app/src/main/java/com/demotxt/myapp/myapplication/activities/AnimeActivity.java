@@ -47,12 +47,12 @@ import okhttp3.Request;
 public class AnimeActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    private final String JSON_PRESENCAS = "http://104.197.69.0/api/employee" ;
-    private List<Presenca> arraypresencas ;
-    private JsonArrayRequest request ;
-    private RequestQueue requestQueue ;
+    private final String JSON_PRESENCAS = "http://104.197.69.0/api/employee";
+    private List<Presenca> arraypresencas;
+    private JsonArrayRequest request;
+    private RequestQueue requestQueue;
 
-    boolean retorno = false;
+    String retorno = null;
 
 
     String name;
@@ -84,7 +84,6 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
         dia = getIntent().getExtras().getString("dia");
 
 
-
         // ini views
 
         CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsingtoolbar_id);
@@ -106,17 +105,17 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
         tv_description.setText(description);
         tv_rating.setText(rating);
         tv_studio.setText(studio);
-        //tv_dia.setText(dia);
+       // getChaveUnica("7");
+        tv_dia.setText(dia);
 
-
-        if (getChaveUnica(name+description+studio+dia)){
-            tv_dia.setText("jackpot");
-        }
-
+      /*  if (getChaveUnica("7").equalsIgnoreCase("1")) {
+            tv_dia.setText("yes");
+        } else {
+            tv_dia.setText("no");
+        }*/
 
 
         collapsingToolbarLayout.setTitle(name);
-
 
 
         Button marcarPresenca = (Button) findViewById(R.id.btnPresenca);
@@ -125,8 +124,6 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
         Voltar.setOnClickListener(this);
 
     }
-
-
 
 
     public void showAlertDialogButtonClicked() {
@@ -177,7 +174,7 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
                 sendPost();
 
                 finish();
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 getApplicationContext().startActivity(intent);
 
 
@@ -201,7 +198,7 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
 
             case R.id.btnVoltar:
                 finish();
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 getApplicationContext().startActivity(intent);
                 break;
 
@@ -209,12 +206,6 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
         }
 
     }
-
-
-
-
-
-
 
 
     public void sendPost() {
@@ -229,7 +220,6 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
                     String currentHora = hora.format(d);
 
 
-
                     URL url = new URL("http://104.197.69.0/api/employee");
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("POST");
@@ -240,7 +230,7 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
 
                     JSONObject jsonParam = new JSONObject();
                     jsonParam.put("id", "");
-                    jsonParam.put("chaveunica", name+description+studio+dia);
+                    jsonParam.put("chaveunica", name + description + studio + dia);
                     jsonParam.put("nome", name);
                     jsonParam.put("edificio", description);
                     jsonParam.put("horainicio", studio);
@@ -272,35 +262,26 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-
-    private boolean getChaveUnica(String chaveUnica) {
-
+    private String getChaveUnica(String chaveUnica) {
 
 
-        request = new JsonArrayRequest(JSON_PRESENCAS+ "/chave/" + chaveUnica , new Response.Listener<JSONArray>() {
+        request = new JsonArrayRequest(JSON_PRESENCAS + "/chave/" + chaveUnica, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
 
-                JSONObject jsonObject  = null ;
+                JSONObject jsonObject = null;
 
 
-
-
-
-
-
+                for (int i = 0; i < response.length(); i++) {
 
 
                     try {
-                        jsonObject = response.getJSONObject(0) ;
+                        jsonObject = response.getJSONObject(i);
+                        Presenca presenca = new Presenca();
+                        presenca.setChaveunica(jsonObject.getString("chaveunica"));
+                        arraypresencas.add(presenca);
 
-                        if (jsonObject.getString("chaveunica").equalsIgnoreCase(name+description+studio+dia)){
 
-
-                            retorno = true;
-                        }else{
-                            retorno = false;
-                        }
 
 
 
@@ -308,7 +289,7 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
                         e.printStackTrace();
                     }
 
-
+                }
 
             }
         }, new Response.ErrorListener() {
@@ -319,24 +300,21 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
         });
 
 
-        requestQueue = Volley.newRequestQueue(AnimeActivity.this);
-        requestQueue.add(request) ;
-
         return retorno;
 
 
     }
 
 
-
-
-
-
-
-
-
-
 }
+
+
+
+
+
+
+
+
 
 
 

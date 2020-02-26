@@ -229,9 +229,7 @@ private void jsonrequest() {
                 if (!lstAnime.get(0).getName().equalsIgnoreCase("SEM AULAS")) {
 
                     myadapter.notifyDataSetChanged();
-                    finish();
-                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                    getApplicationContext().startActivity(intent);
+                    
 
 
                 }else{
