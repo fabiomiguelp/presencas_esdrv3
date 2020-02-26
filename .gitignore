@@ -1,2 +1,4 @@
 *
-!*/app/src/main/java
+/*
+!app/src/main/java/*
+!.gitignore
