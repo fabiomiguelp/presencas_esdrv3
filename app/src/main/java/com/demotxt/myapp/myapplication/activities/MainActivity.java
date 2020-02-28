@@ -33,6 +33,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+
     private final String JSON_URL = "http://35.241.153.86/piso_s2.php" ;
     private JsonArrayRequest request ;
     private RequestQueue requestQueue ;
@@ -150,7 +151,7 @@ private void jsonrequest() {
 
                 }
 
-                if (!lstAnime.get(0).getName().equalsIgnoreCase("SEM AULAS")) {
+                if (!lstAnime.get(0).getName().equalsIgnoreCase("SEMa AULAS")) {
 
                     setuprecyclerview(lstAnime);
 
@@ -226,7 +227,7 @@ private void jsonrequest() {
 
                 }
 
-                if (!lstAnime.get(0).getName().equalsIgnoreCase("SEM AULAS")) {
+                if (!lstAnime.get(0).getName().equalsIgnoreCase("SEMa AULAS")) {
 
                     myadapter.notifyDataSetChanged();
                     

@@ -30,9 +30,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
@@ -52,7 +54,7 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
     private JsonArrayRequest request;
     private RequestQueue requestQueue;
 
-    String retorno = null;
+
 
 
     String name;
@@ -64,8 +66,14 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
     String image_url;
     String dia;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
+
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_anime);
@@ -78,11 +86,12 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
         description = getIntent().getExtras().getString("anime_description");
         studio = getIntent().getExtras().getString("anime_studio");
         category = getIntent().getExtras().getString("anime_category");
-        nb_episode = getIntent().getExtras().getInt("anime_nb_episode");
+//        nb_episode = getIntent().getExtras().getInt("anime_nb_episode");
         rating = getIntent().getExtras().getString("anime_rating");
         image_url = getIntent().getExtras().getString("anime_img");
         dia = getIntent().getExtras().getString("dia");
 
+        getChaveUnica(name + description + studio + dia);
 
         // ini views
 
@@ -106,13 +115,12 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
         tv_rating.setText(rating);
         tv_studio.setText(studio);
        // getChaveUnica("7");
-        tv_dia.setText(dia);
+       // tv_dia.setText(dia);
 
-      /*  if (getChaveUnica("7").equalsIgnoreCase("1")) {
-            tv_dia.setText("yes");
-        } else {
-            tv_dia.setText("no");
-        }*/
+
+            tv_dia.setText(dia);
+
+
 
 
         collapsingToolbarLayout.setTitle(name);
@@ -129,38 +137,22 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
     public void showAlertDialogButtonClicked() {
 
 
-/*
-        OkHttpClient client = new OkHttpClient();
-
-        String url = "https://morning-reaches-16639.herokuapp.com/api/employee";
-
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String myResponse = response.body().string();
-                }
-            }
 
 
-        });*/
 
 
         // setup the alert builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         Date d2 = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
-        String currentDateTimeString2 = sdf.format(d2);
+        SimpleDateFormat sdf = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            sdf = new SimpleDateFormat("hh:mm a");
+        }
+        String currentDateTimeString2 = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            currentDateTimeString2 = sdf.format(d2);
+        }
 
         builder.setTitle("Sucesso!");
         builder.setMessage("Presenca Marcada às : " + currentDateTimeString2);
@@ -216,8 +208,14 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
 
 
                     Date d = new Date();
-                    SimpleDateFormat hora = new SimpleDateFormat("hh:mm a");
-                    String currentHora = hora.format(d);
+                    SimpleDateFormat hora = null;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                        hora = new SimpleDateFormat("hh:mm a");
+                    }
+                    String currentHora = null;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                        currentHora = hora.format(d);
+                    }
 
 
                     URL url = new URL("http://104.197.69.0/api/employee");
@@ -259,48 +257,81 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
 
 
         thread.start();
+
     }
 
 
-    private String getChaveUnica(String chaveUnica) {
 
 
-        request = new JsonArrayRequest(JSON_PRESENCAS + "/chave/" + chaveUnica, new Response.Listener<JSONArray>() {
+    private void getChaveUnica(final String chaveUnica) {
+        Thread thread = new Thread(new Runnable() {
             @Override
-            public void onResponse(JSONArray response) {
+            public void run() {
+                try {
 
-                JSONObject jsonObject = null;
+                    URL url = new URL("http://104.197.69.0/api/employee/chave/"+chaveUnica);//your url i.e fetch data from .
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.setRequestProperty("Content-Type", "application/json");
+                    conn.setRequestProperty("Accept", "application/json");
+                    if (conn.getResponseCode() != 200) {
+                        throw new RuntimeException("Failed : HTTP Error code : "
+                                + conn.getResponseCode());
+                    }
+                    InputStreamReader in = new InputStreamReader(conn.getInputStream());
+                    BufferedReader br = new BufferedReader(in);
+                    StringBuilder responseStrBuilder = new StringBuilder();
 
 
-                for (int i = 0; i < response.length(); i++) {
-
-
-                    try {
-                        jsonObject = response.getJSONObject(i);
-                        Presenca presenca = new Presenca();
-                        presenca.setChaveunica(jsonObject.getString("chaveunica"));
-                        arraypresencas.add(presenca);
+                    String inputStr;
+                    while ((inputStr = br.readLine()) != null)
+                        responseStrBuilder.append(inputStr);
 
 
 
 
+                    JSONObject jsonObject = new JSONObject(responseStrBuilder.toString());
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    //returns the json object
+                    if (jsonObject.get("chaveunica").toString().equalsIgnoreCase(name + description + studio + dia)) {
+
+                        Button MarcarPresenca = (Button) findViewById(R.id.btnPresenca);
+                        MarcarPresenca.setVisibility(View.GONE);
+
+
+
+                        TextView presenca = findViewById(R.id.lblPresenca);
+
+                        presenca.setText("Presença marcada às: " + jsonObject.get("horamarcada").toString());
+
+
+
+                    } else {
+                        TextView presenca = findViewById(R.id.lblPresenca);
+
+                        presenca.setText("Presença ainda não marcada");
                     }
 
+                    conn.disconnect();
+
+                } catch (Exception e) {
+                    System.out.println("Exception in NetClientGet:- " + e);
                 }
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
 
             }
+
+
         });
 
 
-        return retorno;
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
 
     }

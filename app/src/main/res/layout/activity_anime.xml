@@ -124,6 +124,14 @@
             android:text="Anime Description"
             android:textColor="#fff" />
 
+        <TextView
+            android:id="@+id/lblPresenca"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Presença ainda não marcada"
+            android:gravity="center"
+            android:textColor="#fff" />
+
         <Button
             android:id="@+id/btnPresenca"
             style="@android:style/Widget.Button"
@@ -131,7 +139,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center"
             android:background="@android:color/holo_green_dark"
-            android:text="Marcar Preseça"
+            android:text="Marcar Presença"
             android:textColor="#FFFFFF"
             android:textColorHighlight="@color/colorAccent"
             android:textColorHint="#4CAF50" />
@@ -143,7 +151,7 @@
             android:layout_gravity="center_horizontal|center"
             android:layout_marginTop="15dp"
             android:background="@android:color/holo_red_dark"
-            android:text="Cancelar"
+            android:text="Voltar"
             android:textColor="#FFFFFF"
             android:textColorHighlight="@color/colorAccent"
             android:textColorHint="#4CAF50" />
