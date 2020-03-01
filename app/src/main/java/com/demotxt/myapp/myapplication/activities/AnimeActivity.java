@@ -39,6 +39,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -147,7 +148,7 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
         Date d2 = new Date();
         SimpleDateFormat sdf = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            sdf = new SimpleDateFormat("hh:mm a");
+            sdf = new SimpleDateFormat("HH:mm", Locale.UK);
         }
         String currentDateTimeString2 = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
@@ -210,7 +211,7 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
                     Date d = new Date();
                     SimpleDateFormat hora = null;
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                        hora = new SimpleDateFormat("hh:mm a");
+                        hora = new SimpleDateFormat("HH:mm", Locale.UK);
                     }
                     String currentHora = null;
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
