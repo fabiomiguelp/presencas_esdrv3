@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="160dp"
+    android:layout_height="150dp"
     android:layout_marginTop="5dp"
     android:background="@drawable/bgg"
     android:orientation="horizontal"
@@ -54,18 +54,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="Dia"
-            android:textColor="#fff" />
-
-        <TextView
-            android:id="@+id/falta"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:background="#00D60000"
-            android:backgroundTint="#00D60000"
-            android:drawableLeft="@android:drawable/ic_delete"
-            android:text="Falta"
-            android:textAlignment="center"
             android:textColor="#fff" />
 
 
