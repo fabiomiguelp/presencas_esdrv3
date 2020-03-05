@@ -15,24 +15,15 @@ import android.widget.TextView;
 
 
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.demotxt.myapp.myapplication.R ;
-import com.demotxt.myapp.myapplication.model.Anime;
 import com.demotxt.myapp.myapplication.model.Presenca;
 
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
 
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -40,11 +31,6 @@ import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 
 
 public class AnimeActivity extends AppCompatActivity implements View.OnClickListener {
@@ -54,6 +40,7 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
     private List<Presenca> arraypresencas;
     private JsonArrayRequest request;
     private RequestQueue requestQueue;
+    String resultado = null;
 
 
 
@@ -136,7 +123,7 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
 
 
     public void showAlertDialogButtonClicked() {
-
+        sendPost();
 
 
 
@@ -155,8 +142,7 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
             currentDateTimeString2 = sdf.format(d2);
         }
 
-        builder.setTitle("Sucesso!");
-        builder.setMessage("Presenca Marcada às : " + currentDateTimeString2);
+
 
         // add a button
 
@@ -164,7 +150,6 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                sendPost();
 
                 finish();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -173,6 +158,16 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
 
             }
         });
+
+        builder.setTitle("Alerta");
+        if (resultado.equalsIgnoreCase("sucesso")){
+            builder.setMessage("Presenca marcada com SUCESSO! Às : " + currentDateTimeString2);
+        }else{
+            builder.setMessage("ERRO!!! PRESENCA NÃO MARCADA");
+
+        }
+
+
 
         // create and show the alert dialog
 
@@ -202,9 +197,11 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
 
 
     public void sendPost() {
+
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
+
                 try {
 
 
@@ -244,8 +241,12 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
                     os.flush();
                     os.close();
 
-                    Log.i("STATUS", String.valueOf(conn.getResponseCode()));
-                    Log.i("MSG", conn.getResponseMessage());
+                    if (conn.getResponseCode() == 200) {
+                        resultado = "Sucesso";
+                    }
+
+                   // Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+                  //  Log.i("MSG", conn.getResponseMessage());
 
                     conn.disconnect();
                 } catch (Exception e) {
@@ -258,6 +259,11 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
 
 
         thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 
