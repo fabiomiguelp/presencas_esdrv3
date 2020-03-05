@@ -118,13 +118,6 @@
 
 
         <TextView
-            android:id="@+id/aa_description"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Anime Description"
-            android:textColor="#fff" />
-
-        <TextView
             android:id="@+id/lblPresenca"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

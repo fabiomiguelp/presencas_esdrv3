@@ -59,7 +59,7 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
 
 
     String name;
-    String description;
+    //String description;
     String studio;
     String category;
     int nb_episode;
@@ -84,7 +84,7 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
         // Recieve data
 
         name = getIntent().getExtras().getString("anime_name");
-        description = getIntent().getExtras().getString("anime_description");
+       // description = getIntent().getExtras().getString("anime_description");
         studio = getIntent().getExtras().getString("anime_studio");
         category = getIntent().getExtras().getString("anime_category");
 //        nb_episode = getIntent().getExtras().getInt("anime_nb_episode");
@@ -92,7 +92,7 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
         image_url = getIntent().getExtras().getString("anime_img");
         dia = getIntent().getExtras().getString("dia");
 
-        getChaveUnica(name + description + studio + dia);
+        getChaveUnica(name + rating + studio + dia);
 
         // ini views
 
@@ -102,7 +102,7 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
         TextView tv_name = findViewById(R.id.aa_anime_name);
         TextView tv_studio = findViewById(R.id.aa_studio);
         TextView tv_categorie = findViewById(R.id.aa_categorie);
-        TextView tv_description = findViewById(R.id.aa_description);
+       // TextView tv_description = findViewById(R.id.aa_description);
         TextView tv_rating = findViewById(R.id.aa_rating);
         TextView tv_dia = findViewById(R.id.aa_dia);
 
@@ -112,7 +112,7 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
 
         tv_name.setText(name);
         tv_categorie.setText(category);
-        tv_description.setText(description);
+        //tv_description.setText(description);
         tv_rating.setText(rating);
         tv_studio.setText(studio);
        // getChaveUnica("7");
@@ -229,9 +229,9 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
 
                     JSONObject jsonParam = new JSONObject();
                     jsonParam.put("id", "");
-                    jsonParam.put("chaveunica", name + description + studio + dia);
+                    jsonParam.put("chaveunica", name + rating + studio + dia);
                     jsonParam.put("nome", name);
-                    jsonParam.put("edificio", description);
+                    jsonParam.put("edificio", rating);
                     jsonParam.put("horainicio", studio);
                     jsonParam.put("horamarcada", currentHora);
                     jsonParam.put("dataaula", dia);
@@ -294,7 +294,7 @@ public class AnimeActivity extends AppCompatActivity implements View.OnClickList
                     JSONObject jsonObject = new JSONObject(responseStrBuilder.toString());
 
                     //returns the json object
-                    if (jsonObject.get("chaveunica").toString().equalsIgnoreCase(name + description + studio + dia)) {
+                    if (jsonObject.get("chaveunica").toString().equalsIgnoreCase(name + rating + studio + dia)) {
 
                         Button MarcarPresenca = (Button) findViewById(R.id.btnPresenca);
                         MarcarPresenca.setVisibility(View.GONE);

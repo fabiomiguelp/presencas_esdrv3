@@ -151,7 +151,7 @@ private void jsonrequest() {
 
                 }
 
-                if (!lstAnime.get(0).getName().equalsIgnoreCase("SEMa AULAS")) {
+                if (!lstAnime.get(0).getName().equalsIgnoreCase("SEM AULAS")) {
 
                     setuprecyclerview(lstAnime);
 
@@ -227,7 +227,7 @@ private void jsonrequest() {
 
                 }
 
-                if (!lstAnime.get(0).getName().equalsIgnoreCase("SEMa AULAS")) {
+                if (!lstAnime.get(0).getName().equalsIgnoreCase("SEM AULAS")) {
 
                     myadapter.notifyDataSetChanged();
                     
